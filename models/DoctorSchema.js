@@ -10,9 +10,10 @@ const mongoose=require("mongoose")
       experience:Number,
       hospital:String,
       about:String,
-
-
-
+      appointments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Appointment'
+    }]
 
   })
 

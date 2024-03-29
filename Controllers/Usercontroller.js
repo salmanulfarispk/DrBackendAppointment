@@ -314,7 +314,17 @@ module.exports={
                 note,
                 doctorId,
             });
-    
+                 
+        const doctor = await DoctorSchema.findById(doctorId);
+        if (!doctor) {
+            return res.status(404).json({
+                status: "error",
+                message: "Doctor not found"
+            });
+        }
+
+        doctor.appointments.push(newAppointment._id);
+        await doctor.save();
     
             return res.status(201).json({
                 status: "success",

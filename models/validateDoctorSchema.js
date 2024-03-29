@@ -5,7 +5,7 @@ const joiDoctors = Joi.object({
     name: Joi.string().required(),
     image: Joi.string().required(),
     category: Joi.string().required(),
-    experience: Joi.string().required(),
+    experience: Joi.number().required(),
     hospital: Joi.string().required(),
     about: Joi.string().required(),
     
