@@ -296,7 +296,7 @@ module.exports={
         try {
             
             const { value,error } = AppointmentJoischema.validate(req.body);
-            console.log("value",value);
+            // console.log("value",value);
             if (error) {
                 return res.status(400).json({
                     status: "error",
