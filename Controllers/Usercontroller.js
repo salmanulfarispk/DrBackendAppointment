@@ -7,7 +7,6 @@ const categorySchema=require("../models/CategoryList")
 const Appointment = require("../models/Appointment")
 
 
-
 module.exports={
 
      //UserRegistaration
@@ -341,10 +340,30 @@ module.exports={
 
     },
     
-   
+   BookingList:async(req,res)=>{
+
+    const AppointmentData= await Appointment.find().populate('doctorId')
+
+    if(AppointmentData.length > 0) {
+     const { date, time, doctorId } = AppointmentData[0];
+      const docImage=doctorId.image;
+      const docName=doctorId.name;
+      const dochopital=doctorId.hospital;
+
+        return res.status(200).json({
+            status: "success",
+            message: "All appointments retrieved successfully",
+            data: {date,time,docImage,docName,dochopital}
+        });
+   } else {
+            return res.status(404).json({
+                status: "error",
+                message: "No appointments found"
+            });
+        }
 
     
-
+   },
 
 
 
