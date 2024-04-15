@@ -19,6 +19,8 @@ router
  .get("/category/:Docname",TrycatchHandler(userControler.DocByname))
  .get("/details/suggestDocs/doctor", TrycatchHandler(userControler.SuggestDocts))
  .post("/Details/Doctor/BookAppointment",TrycatchHandler(userControler.BookAppointment))
+ .get("/bookingdetails/:id",TrycatchHandler(userControler.BookingList))
+ .delete("/cancelAppointment/:appointmentId",TrycatchHandler(userControler.CancelAppointment))
 
 
 module.exports=router

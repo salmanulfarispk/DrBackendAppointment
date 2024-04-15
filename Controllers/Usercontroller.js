@@ -341,19 +341,25 @@ module.exports={
     },
     
    BookingList:async(req,res)=>{
-
-    const AppointmentData= await Appointment.find().populate('doctorId')
+    
+    const userId = req.params.id;
+    const AppointmentData= await Appointment.find({userId}).populate('doctorId')
 
     if(AppointmentData.length > 0) {
-     const { date, time, doctorId } = AppointmentData[0];
-      const docImage=doctorId.image;
-      const docName=doctorId.name;
-      const dochopital=doctorId.hospital;
+        const bookingList = AppointmentData.map(appointment => ({
+            date: appointment.date,
+            time: appointment.time,
+            AppointmentId: appointment._id,
+            userId: appointment.userId,
+            image: appointment.doctorId.image,
+            doctorName: appointment.doctorId.name,
+            hospital: appointment.doctorId.hospital
+          }));
 
         return res.status(200).json({
             status: "success",
             message: "All appointments retrieved successfully",
-            data: {date,time,docImage,docName,dochopital}
+            datas: bookingList
         });
    } else {
             return res.status(404).json({
@@ -364,6 +370,44 @@ module.exports={
 
     
    },
+   CancelAppointment:async (req, res) => {
+    try {
+        const { appointmentId } = req.params;
+
+        const appointment = await Appointment.findById(appointmentId);
+        if (!appointment) {
+            return res.status(404).json({
+                status: "error",
+                message: "Appointment not found"
+            });
+        }
+
+        const doctor = await DoctorSchema.findById(appointment.doctorId);
+        if (!doctor) {
+            return res.status(404).json({
+                status: "error",
+                message: "Doctor not found"
+            }); 
+        }
+
+        doctor.appointments.pull(appointmentId);
+        await doctor.save();
+
+        await Appointment.findByIdAndDelete(appointmentId);
+
+        return res.status(200).json({
+            status: "success",
+            message: 'Appointment canceled successfully'
+        });
+
+    } catch (err) {
+        console.error('Error canceling appointment:', err);
+        return res.status(500).json({
+            message: 'Failed to cancel appointment'
+        });
+    }
+},
+
 
 
 
