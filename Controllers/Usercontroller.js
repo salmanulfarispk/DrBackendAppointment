@@ -7,6 +7,7 @@ const categorySchema=require("../models/CategoryList")
 const Appointment = require("../models/Appointment")
 
 
+
 module.exports={
 
      //UserRegistaration
@@ -324,7 +325,8 @@ module.exports={
 
         doctor.appointments.push(newAppointment._id);
         await doctor.save();
-    
+
+
             return res.status(201).json({
                 status: "success",
                 message: 'Appointment created successfully',
