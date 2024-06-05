@@ -5,6 +5,7 @@ const jwt=require("jsonwebtoken")
 const DoctorSchema = require("../models/DoctorSchema")
 const categorySchema=require("../models/CategoryList")
 const Appointment = require("../models/Appointment")
+const sendMail = require("./utils/sendMail")
 
 
 
@@ -325,6 +326,11 @@ module.exports={
 
         doctor.appointments.push(newAppointment._id);
         await doctor.save();
+
+        const subject = 'Appointment Confirmation';
+        const message = `Your appointment with ${doctor.name} on ${date} at ${time} has been confirmed.`;
+
+        await sendMail(email, subject, message);
 
 
             return res.status(201).json({
